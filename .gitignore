@@ -20,6 +20,9 @@ build/
 # Bot-generated config (optional; remove this line if you want to version shared dynamic codes)
 config/dynamic_codes.yaml
 
+# Local run log (main.py)
+bot.log
+
 # OS / IDE
 .DS_Store
 .idea/

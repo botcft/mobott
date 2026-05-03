@@ -3,14 +3,21 @@ Telegram Group Automation – entry point.
 Listens for /new CODE Company Name in the control group; creates group via MTProto, replies with link + QR.
 """
 import asyncio
+import faulthandler
 import logging
 import os
+import signal
 import sys
 from pathlib import Path
 from typing import Optional
 
 # Show we started (flush so it appears immediately)
 print("Loading...", flush=True)
+
+# Stack dump on SIGUSR1: `kill -USR1 <pid>` when the process seems stuck
+if hasattr(signal, "SIGUSR1"):
+    faulthandler.register(signal.SIGUSR1, chain=False)
+faulthandler.enable(all_threads=True)
 
 from dotenv import load_dotenv
 
@@ -34,7 +41,27 @@ from src.telethon_service import create_telethon_client
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+    force=True,
 )
+_root = logging.getLogger()
+_log_file = Path(__file__).resolve().parent / "bot.log"
+try:
+    _fh = logging.FileHandler(_log_file, encoding="utf-8")
+    _fh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s"))
+    _root.addHandler(_fh)
+except OSError as _e:
+    print(f"Warning: could not open {_log_file} for logging: {_e}", flush=True)
+
+
+def _global_excepthook(exc_type, exc, tb):
+    if exc_type is KeyboardInterrupt:
+        return sys.__excepthook__(exc_type, exc, tb)
+    logging.critical("Uncaught exception", exc_info=(exc_type, exc, tb))
+    print(f"Fatal: {exc_type.__name__}: {exc}", flush=True)
+    sys.__excepthook__(exc_type, exc, tb)
+
+
+sys.excepthook = _global_excepthook
 logger = logging.getLogger(__name__)
 
 
@@ -86,12 +113,16 @@ def main() -> None:
             await asyncio.wait_for(telethon_client.connect(), timeout=60.0)
         except asyncio.TimeoutError:
             await telethon_client.disconnect()
-            print("Connection timed out. Run: .venv/bin/python login_telethon.py --force", flush=True)
-            raise SystemExit(1)
+            msg = "Telethon connection timed out. Run: .venv/bin/python login_telethon.py --force"
+            logger.error(msg)
+            print(msg, flush=True)
+            raise RuntimeError(msg) from None
         if not await telethon_client.is_user_authorized():
             await telethon_client.disconnect()
-            print("Session invalid or expired. Run: .venv/bin/python login_telethon.py --force", flush=True)
-            raise SystemExit(1)
+            msg = "Session invalid or expired. Run: .venv/bin/python login_telethon.py --force"
+            logger.error(msg)
+            print(msg, flush=True)
+            raise RuntimeError(msg)
         print("Telethon connected.", flush=True)
         logger.info("Telethon (user) client connected")
 
@@ -128,7 +159,7 @@ def main() -> None:
                 "/token (or /newbot), copy the token into .env with no quotes or spaces, then run again.",
                 flush=True,
             )
-            raise SystemExit(1)
+            raise RuntimeError("Invalid TELEGRAM_BOT_TOKEN")
         await app.start()
         bot_info = await app.bot.get_me()
         logger.info("Polling started. Bot: @%s", bot_info.username)
@@ -148,12 +179,20 @@ def main() -> None:
             await telethon_client.disconnect()
 
     print("Starting async bot loop...", flush=True)
+    logger.info("File log: %s", _log_file.resolve())
     try:
         asyncio.run(run_bot())
-    except Exception as e:
+    except RuntimeError as e:
+        logger.exception("Bot startup failed: %s", e)
+        print("Error: %s" % e, flush=True)
+        raise SystemExit(1) from e
+    except BaseException as e:
+        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+            logger.info("Shutdown: %s", type(e).__name__)
+            raise
         logger.exception("Bot crashed: %s", e)
         print("Error: %s" % e, flush=True)
-        raise
+        raise SystemExit(1) from e
 
 if __name__ == "__main__":
     print("Entry point", flush=True)
