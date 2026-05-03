@@ -1,0 +1,14 @@
+# Env
+python-dotenv>=1.0.0
+
+# Bot API
+python-telegram-bot>=20.0,<21
+
+# MTProto user account (create groups, add members, promote admins)
+telethon>=1.34.0
+
+# Config
+PyYAML>=6.0
+
+# QR code for invite link
+qrcode[pil]>=7.0
