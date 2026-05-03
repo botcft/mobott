@@ -15,10 +15,7 @@ __pycache__/
 dist/
 build/
 
-# Telethon / runtime
-session/
-*.session
-*.session-journal
+
 
 # Bot-generated config (optional; remove this line if you want to version shared dynamic codes)
 config/dynamic_codes.yaml
