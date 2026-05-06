@@ -11,6 +11,8 @@ import sys
 from pathlib import Path
 from typing import Optional
 
+from fastapi import FastAPI
+
 # Show we started (flush so it appears immediately)
 print("Loading...", flush=True)
 
@@ -73,6 +75,34 @@ def _env_int(key: str, default: Optional[int] = None) -> Optional[int]:
         return int(v)
     except ValueError:
         return default
+
+
+def _build_asgi_app() -> FastAPI:
+    """Expose an ASGI app for platforms that run `uvicorn main:app`."""
+    try:
+        from app.dashboard import app as dashboard_app
+
+        return dashboard_app
+    except Exception as exc:  # noqa: BLE001
+        fallback = FastAPI(title="Telegram Automation Fallback")
+
+        @fallback.get("/")
+        async def root() -> dict[str, str]:
+            return {
+                "status": "degraded",
+                "message": "Dashboard app failed to initialize. Check env vars and startup logs.",
+                "error": str(exc),
+            }
+
+        @fallback.get("/health")
+        async def health() -> dict[str, str]:
+            return {"status": "degraded"}
+
+        return fallback
+
+
+# This is the object deployment platforms expect when configured as `main:app`.
+app = _build_asgi_app()
 
 
 def main() -> None:
