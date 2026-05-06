@@ -49,7 +49,7 @@ FE:
 
 NBSC:
   name_format: "{company} X NOBS Crypto (Collab)"
-  members: [kyrin, zaraiz, ysamar, realcryptomoses]
+  members: [kyrin, Zaraiz3, ysamar, realcryptomoses]
   admins: [ysamar, realcryptomoses]
   welcome: |
     Welcome 👋
@@ -58,7 +58,7 @@ NBSC:
 
 NBSDF:
   name_format: "{company} X NOBS Crypto (DF)"
-  members: [kyrin, zaraiz, ysamar, saul, realcryptomoses]
+  members: [kyrin, Zaraiz3, ysamar, saul, realcryptomoses]
   admins: [ysamar, realcryptomoses]
   welcome: |
     Welcome 👋
@@ -67,7 +67,7 @@ NBSDF:
 
 CRUSHC:
   name_format: "{company} X Crush Circle (Collab)"
-  members: [kyrin, zaraiz, ysamar, realcryptomoses]
+  members: [kyrin, Zaraiz3, ysamar, realcryptomoses]
   admins: [ysamar, realcryptomoses]
   welcome: |
     Welcome 👋

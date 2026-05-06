@@ -39,7 +39,7 @@ codes:
       This chat is for our Fluence exchange partnership, where we explore collaboration and help support exchange marketing initiatives.
   NBSC:
     title_template: "{company} X NOBS Crypto (Collab)"
-    members: ["kyrin", "zaraiz", "ysamar"]
+    members: ["kyrin", "Zaraiz3", "ysamar"]
     admins: ["ysamar", "realcryptomoses"]
     welcome_message: |
       Welcome 👋
@@ -47,7 +47,7 @@ codes:
       This chat is for a collaboration between your team and ours, focused on aligning and working together efficiently.
   NBSDF:
     title_template: "{company} X NOBS Crypto (DF)"
-    members: ["kyrin", "zaraiz", "ysamar", "saul"]
+    members: ["kyrin", "Zaraiz3", "ysamar", "saul"]
     admins: ["ysamar", "realcryptomoses"]
     welcome_message: |
       Welcome 👋
@@ -55,8 +55,8 @@ codes:
       This chat is for a partnership to get your project featured on our channels, reaching an audience of 150k+ followers.
   CRUSHC:
     title_template: "{company} X Crush Circle (Collab)"
-    members: ["danielle", "zaraiz", "ysamar", "caleb"]
-    admins: ["ysamar", "danielle", "zaraiz", "realcryptomoses"]
+    members: ["danielle", "Zaraiz3", "ysamar", "caleb"]
+    admins: ["ysamar", "danielle", "Zaraiz3", "realcryptomoses"]
     welcome_message: |
       Welcome 👋
       It was great meeting you at consensus Miami 2026.
