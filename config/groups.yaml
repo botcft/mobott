@@ -1,0 +1,71 @@
+control_group_id: -3999467199
+leads_log_group_id: -3999467199
+include_private_note_in_welcome: false
+invite:
+  expire_hours: 168
+  member_limit: 50
+codes:
+  TMTP:
+    title_template: "{company} X TMT.AI (Partnership)"
+    members: ["shaheer", "reece", "joshua"]
+    admins: ["shaheer", "reece", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for our Track My Trades AI partnership, where we'll coordinate collaboration, integrations, and next steps together.
+  TMTE:
+    title_template: "{company} X TMT.AI (Api Connection)"
+    members: ["shaheer", "reece", "joshua", "toripo", "hamza"]
+    admins: ["shaheer", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for our Track My Trades AI exchange API connection, bringing our teams and developers together to ensure a smooth and efficient onboarding to Track My Trades.
+  FDF:
+    title_template: "{company} X Fluence (DF)"
+    members: ["josh"]
+    admins: ["josh", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for Fluence Deal Flow, where we support partners with KOL marketing and deal flow opportunities.
+  FE:
+    title_template: "{company} X Fluence (Exchange)"
+    members: ["josh", "tom buttler", "conor kenny"]
+    admins: ["josh", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for our Fluence exchange partnership, where we explore collaboration and help support exchange marketing initiatives.
+  NBSC:
+    title_template: "{company} X NOBS Crypto (Collab)"
+    members: ["kyrin", "zaraiz", "ysamar"]
+    admins: ["ysamar", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for a collaboration between your team and ours, focused on aligning and working together efficiently.
+  NBSDF:
+    title_template: "{company} X NOBS Crypto (DF)"
+    members: ["kyrin", "zaraiz", "ysamar", "saul"]
+    admins: ["ysamar", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for a partnership to get your project featured on our channels, reaching an audience of 150k+ followers.
+  CRUSHC:
+    title_template: "{company} X Crush Circle (Collab)"
+    members: ["danielle", "zaraiz", "ysamar", "caleb"]
+    admins: ["ysamar", "danielle", "zaraiz", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      It was great meeting you at consensus Miami 2026.
+      This chat is for a collaboration between your team and Crush Circle, focused on exploring opportunities and working closely together.
+  TEST3:
+    title_template: "{company} X TMT.AI (Test)"
+    members: ["tmtaimanager", "tmtaisupportkhubaib", "tmtaisupportmoeed"]
+    admins: ["tmtaimanager", "realcryptomoses"]
+    welcome_message: |
+      Welcome 👋
+      This is a TEST3 onboarding group for validation.
+      Once testing is complete we will switch this flow to the live code mapping.

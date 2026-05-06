@@ -1,0 +1,1 @@
+"""Telegram group automation package."""
