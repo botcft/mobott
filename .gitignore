@@ -1,19 +1,10 @@
-<<<<<<< HEAD
-.env
-*.session
-*.session-journal
-__pycache__/
-*.pyc
-automation.db
-=======
-# Secrets & local env
 .env
 .env.local
 *.pem
-
-# Python
 .venv/
 venv/
+*.session
+*.session-journal
 __pycache__/
 *.py[cod]
 *$py.class
@@ -22,17 +13,9 @@ __pycache__/
 .eggs/
 dist/
 build/
-
-
-
-# Bot-generated config (optional; remove this line if you want to version shared dynamic codes)
+automation.db
 config/dynamic_codes.yaml
-
-# Local run log (main.py)
 bot.log
-
-# OS / IDE
 .DS_Store
 .idea/
 .vscode/
->>>>>>> 79b3bcb84a79943fb8d5ba3b5a34db920c34ee64
