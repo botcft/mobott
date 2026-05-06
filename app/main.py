@@ -21,6 +21,7 @@ from telegram.ext import (
 )
 
 from app.config import AppConfig, load_config
+from app.credentials import telegram_credentials_from_env
 from app.db import Database, Registration
 from app.telegram_service import TelegramUserService
 
@@ -528,9 +529,7 @@ async def app_error_handler(update: object, context: ContextTypes.DEFAULT_TYPE) 
 
 def build_app() -> Application:
     load_dotenv()
-    bot_token = os.getenv("BOT_TOKEN")
-    api_id = os.getenv("TELEGRAM_API_ID")
-    api_hash = os.getenv("TELEGRAM_API_HASH")
+    bot_token, api_id, api_hash = telegram_credentials_from_env()
     telethon_session = os.getenv(
         "TELETHON_SESSION_BOT",
         os.getenv("TELETHON_SESSION", "group_creator.session"),
@@ -538,14 +537,9 @@ def build_app() -> Application:
     db_path = os.getenv("DB_PATH", "automation.db")
     config_path = os.getenv("CONFIG_PATH", "config/groups.yaml")
 
-    if not bot_token:
-        raise RuntimeError("BOT_TOKEN is required.")
-    if not api_id or not api_hash:
-        raise RuntimeError("TELEGRAM_API_ID and TELEGRAM_API_HASH are required.")
-
     config = load_config(config_path)
     db = Database(db_path)
-    mtproto = TelegramUserService(session=telethon_session, api_id=int(api_id), api_hash=api_hash)
+    mtproto = TelegramUserService(session=telethon_session, api_id=api_id, api_hash=api_hash)
     services = ServiceContainer(config=config, db=db, mtproto=mtproto)
 
     app = Application.builder().token(bot_token).build()

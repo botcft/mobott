@@ -15,6 +15,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from telegram import Bot
 
 from app.config import AppConfig, load_config
+from app.credentials import telegram_credentials_from_env
 from app.db import Database, Registration
 from app.telegram_service import TelegramUserService
 
@@ -220,18 +221,11 @@ def _layout(content: str) -> str:
 
 def create_dashboard_app() -> FastAPI:
     load_dotenv()
-    bot_token = os.getenv("BOT_TOKEN")
-    api_id = os.getenv("TELEGRAM_API_ID")
-    api_hash = os.getenv("TELEGRAM_API_HASH")
+    bot_token, api_id, api_hash = telegram_credentials_from_env()
     bot_session = os.getenv("TELETHON_SESSION_BOT", os.getenv("TELETHON_SESSION", "group_creator.session"))
     telethon_session = os.getenv("TELETHON_SESSION_DASHBOARD", f"{bot_session}.dashboard")
     db_path = os.getenv("DB_PATH", "automation.db")
     config_path = os.getenv("CONFIG_PATH", "config/groups.yaml")
-
-    if not bot_token:
-        raise RuntimeError("BOT_TOKEN is required.")
-    if not api_id or not api_hash:
-        raise RuntimeError("TELEGRAM_API_ID and TELEGRAM_API_HASH are required.")
 
     if not os.path.exists(telethon_session) and os.path.exists(bot_session):
         # Use a dedicated dashboard session file to avoid sqlite locks with bot process.
@@ -239,7 +233,7 @@ def create_dashboard_app() -> FastAPI:
 
     config = load_config(config_path)
     db = Database(db_path)
-    mtproto = TelegramUserService(session=telethon_session, api_id=int(api_id), api_hash=api_hash)
+    mtproto = TelegramUserService(session=telethon_session, api_id=api_id, api_hash=api_hash)
     bot = Bot(token=bot_token)
     state = DashboardState(config=config, db=db, mtproto=mtproto, bot=bot)
 
