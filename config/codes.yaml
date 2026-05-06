@@ -1,73 +1,75 @@
 # Code -> group naming, members, admins, welcome message
 # Add new codes here; no code changes needed.
+# realcryptomoses is also enforced in code for every /new (see telethon_service._ensure_default_admin).
 
 TEST:
   name_format: "{company} X TMT.AI (TEST)"
-  members: [TMTAISupportKhubaib, TMTAIMANAGER, TMTAISupportMoeed]
-  admins: [TMTAIMANAGER]
+  members: [TMTAISupportKhubaib, TMTAIMANAGER, TMTAISupportMoeed, realcryptomoses]
+  admins: [TMTAIMANAGER, realcryptomoses]
   welcome: |
     Test group 👋
+    Great connecting at Consensus Miami 2026.
     This is a sandbox chat for TMT.AI support workflow testing.
 
 TMTP:
   name_format: "{company} X TMT.AI (Partnership)"
-  members: [shaheer, reece, joshua]
-  admins: [shaheer, reece]
+  members: [shaheer, reece, joshua, realcryptomoses]
+  admins: [shaheer, reece, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for our Track My Trades AI partnership, where we'll coordinate collaboration, integrations, and next steps together.
 
 TMTE:
   name_format: "{company} X TMT.AI (Api Connection)"
-  members: [shaheer, reece, joshua, toripo, hamza]
-  admins: [shaheer]
+  members: [shaheer, reece, joshua, toripo, hamza, realcryptomoses]
+  admins: [shaheer, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for our Track My Trades AI exchange API connection, bringing our teams and developers together to ensure a smooth and efficient onboarding to Track My Trades.
 
 FDF:
   name_format: "{company} X Fluence (DF)"
-  members: [josh]
-  admins: [josh]
+  members: [josh, realcryptomoses]
+  admins: [josh, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for Fluence Deal Flow, where we support partners with KOL marketing and deal flow opportunities.
 
 FE:
   name_format: "{company} X Fluence (Exchange)"
-  members: [josh, tom buttler, conor kenny]
-  admins: [josh]
+  members: [josh, tom buttler, conor kenny, realcryptomoses]
+  admins: [josh, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for our Fluence exchange partnership, where we explore collaboration and help support exchange marketing initiatives.
 
 NBSC:
   name_format: "{company} X NOBS Crypto (Collab)"
-  members: [kyrin, zaraiz, ysamar]
-  admins: [ysamar]
+  members: [kyrin, zaraiz, ysamar, realcryptomoses]
+  admins: [ysamar, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for a collaboration between your team and ours, focused on aligning and working together efficiently.
 
 NBSDF:
   name_format: "{company} X NOBS Crypto (DF)"
-  members: [kyrin, zaraiz, ysamar, saul]
-  admins: [ysamar]
+  members: [kyrin, zaraiz, ysamar, saul, realcryptomoses]
+  admins: [ysamar, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for a partnership to get your project featured on our channels, reaching an audience of 150k+ followers.
 
 CRUSHC:
   name_format: "{company} X Crush Circle (Collab)"
-  members: [kyrin, zaraiz, ysamar]
-  admins: [ysamar]
+  members: [kyrin, zaraiz, ysamar, realcryptomoses]
+  admins: [ysamar, realcryptomoses]
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus in Hong Kong.
+    It was great meeting you at Consensus Miami 2026.
     This chat is for a collaboration between your team and Crush Circle, focused on exploring opportunities and working closely together.

