@@ -111,12 +111,14 @@ def main() -> None:
     if not Path("src").is_dir() or not Path("config/codes.yaml").exists():
         print("Run from the project folder. Example: cd '/Users/muzan/Desktop/mo bot' then .venv/bin/python main.py", flush=True)
         sys.exit(1)
-    bot_token = (os.environ.get("TELEGRAM_BOT_TOKEN") or "").strip()
+    bot_token = (
+        os.environ.get("TELEGRAM_BOT_TOKEN") or os.environ.get("BOT_TOKEN") or ""
+    ).strip()
     api_id = _env_int("TELEGRAM_API_ID")
     api_hash = (os.environ.get("TELEGRAM_API_HASH") or "").strip()
 
     if not bot_token:
-        logger.error("Set TELEGRAM_BOT_TOKEN")
+        logger.error("Set TELEGRAM_BOT_TOKEN or BOT_TOKEN")
         raise SystemExit(1)
     if not api_id or not api_hash:
         logger.error("Set TELEGRAM_API_ID and TELEGRAM_API_HASH (for user account / MTProto)")

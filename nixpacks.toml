@@ -1,0 +1,2 @@
+[start]
+cmd = "bash scripts/railway_start.sh"

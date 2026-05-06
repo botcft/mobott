@@ -68,6 +68,20 @@ Open [http://localhost:8080](http://localhost:8080)
 
 By default this uses `TELETHON_SESSION_DASHBOARD` so it does not lock the bot session file.
 
+### Mo bot (this repo root: `/start`, `/new`, `/addcode`)
+
+`python main.py`
+
+Uses `TELEGRAM_BOT_TOKEN` (or `BOT_TOKEN`) plus `TELEGRAM_API_ID` / `TELEGRAM_API_HASH`. Run from the project root so `src/` and `config/codes.yaml` exist.
+
+### Railway
+
+If you only run `uvicorn main:app`, Telegram **never gets polled**, so the bot will not answer in chat. Use the bundled start command instead:
+
+- **`nixpacks.toml`** and **`Procfile`** run `scripts/railway_start.sh`, which starts **`python main.py`** in the background (polling) and then **Uvicorn** on `$PORT` for the dashboard and health checks.
+- Set the same env vars as production (`TELEGRAM_BOT_TOKEN` or `BOT_TOKEN`, API id/hash). Mount or upload a **`session/`** Telethon session file if `/new` should work after deploy.
+- To run **only** the web UI and skip the mo poller: set `DISABLE_MO_BOT=1`.
+
 ### One-Time MTProto Session Bootstrap
 
 Before creating groups from bot/dashboard, run once to authorize the creator account session:
