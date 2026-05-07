@@ -54,18 +54,17 @@ class CreateGroupResult:
     error: str = ""
 
 
-# Full admin rights for promoted users (change_info, post, edit, delete, invite, pin, etc.)
+# Megagroup admin rights (Telethon uses ban_users / add_admins, not restrict_members / promote_members).
+# post_messages / edit_messages are channel-style; leave off for supergroups to avoid API issues.
 def _admin_rights() -> ChatAdminRights:
     return ChatAdminRights(
         change_info=True,
-        post_messages=True,
-        edit_messages=True,
         delete_messages=True,
+        ban_users=True,
         invite_users=True,
-        restrict_members=True,
         pin_messages=True,
         manage_topics=True,
-        promote_members=True,
+        add_admins=True,
         manage_call=True,
         other=True,
     )
