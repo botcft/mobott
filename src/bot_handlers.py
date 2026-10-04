@@ -6,8 +6,18 @@ import logging
 from html import escape
 from typing import Optional, Tuple
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import BotCommand, InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
+
+# Shown in Telegram’s “/” menu (keep in sync with CommandHandlers in main.py).
+BOT_COMMANDS = [
+    BotCommand("start", "Start the bot and see commands"),
+    BotCommand("new", "Create group: /new CODE CompanyName"),
+    BotCommand("addcode", "Add a new CODE (wizard; saved on server)"),
+    BotCommand("deletecode", "Remove a bot-added CODE (/addcode only)"),
+    BotCommand("cancel", "Cancel the /addcode wizard"),
+    BotCommand("skip", "Skip welcome message during /addcode"),
+]
 
 from .config_loader import format_group_name, get_code_config, load_codes
 from .qr_utils import qr_image_bytes
@@ -21,8 +31,12 @@ START_MESSAGE = """👋 Hi! I'm the Group Automation bot.
 Use me in the control group to create new Telegram groups in one command.
 
 Commands:
+/start — This menu
 /new CODE CompanyName — Create a group (e.g. /new TMTP Acme)
 /addcode — Add a new CODE (saved on server; open to anyone)
+/deletecode — Remove a code added via /addcode (built-in codes stay)
+/cancel — Cancel the /addcode wizard
+/skip — Skip welcome message (during /addcode only)
 
 Codes: TEST, TMTP, TMTE, FDF, FE, NBSC, NBSDF, CRUSHC (+ any you add via /addcode).
 

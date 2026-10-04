@@ -76,6 +76,50 @@ def _entry_with_default_admin(entry: Dict[str, Any]) -> Dict[str, Any]:
     return out
 
 
+def list_dynamic_code_keys() -> List[str]:
+    """Codes defined only in dynamic_codes.yaml (not built-in from codes.yaml)."""
+    dp = dynamic_codes_path()
+    if not dp.exists():
+        return []
+    with open(dp, encoding="utf-8") as f:
+        dyn = yaml.safe_load(f) or {}
+    return sorted(str(k).upper() for k in dyn.keys())
+
+
+def delete_dynamic_code(code: str) -> bool:
+    """Remove one bot-added code from dynamic_codes.yaml. Returns True if removed."""
+    code = code.upper()
+    if code_reserved(code):
+        return False
+    dp = dynamic_codes_path()
+    if not dp.exists():
+        return False
+    with open(dp, encoding="utf-8") as f:
+        existing = yaml.safe_load(f) or {}
+    key_to_remove = None
+    for k in existing:
+        if str(k).upper() == code:
+            key_to_remove = k
+            break
+    if key_to_remove is None:
+        return False
+    del existing[key_to_remove]
+    if not existing:
+        dp.unlink(missing_ok=True)
+        return True
+    tmp = dp.with_suffix(".yaml.tmp")
+    with open(tmp, "w", encoding="utf-8") as f:
+        yaml.dump(
+            existing,
+            f,
+            default_flow_style=False,
+            allow_unicode=True,
+            sort_keys=False,
+        )
+    tmp.replace(dp)
+    return True
+
+
 def save_dynamic_entry(code: str, entry: Dict[str, Any]) -> None:
     """Append or replace one code in dynamic_codes.yaml (atomic replace)."""
     code = code.upper()

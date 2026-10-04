@@ -13,7 +13,9 @@ import asyncio
 import os
 from pathlib import Path
 
+import qrcode
 from dotenv import load_dotenv
+from telethon.errors import SessionPasswordNeededError
 
 load_dotenv()
 load_dotenv(".env.example")
@@ -38,7 +40,34 @@ def _remove_session(session_dir: Path, session_name: str) -> None:
         print(f"Removed {path}")
 
 
-async def main(force_login: bool) -> None:
+async def _login_with_qr(client) -> None:
+    """Approve the login from the Telegram app. No SMS is sent."""
+    qr_path = Path("session") / "login_qr.png"
+    await client.connect()
+    print("No SMS. On your phone open Telegram > Settings > Devices > Link Desktop Device.", flush=True)
+    print("Scan the QR image that opens. Keep this window running until it says logged in.\n", flush=True)
+    qr_login = await client.qr_login()
+    while True:
+        qrcode.make(qr_login.url).save(qr_path)
+        print(f"QR image: {qr_path.resolve()}", flush=True)
+        try:
+            os.startfile(qr_path.resolve())
+        except OSError as exc:
+            print(f"Could not open the image automatically: {exc}")
+        try:
+            await qr_login.wait()
+            break
+        except asyncio.TimeoutError:
+            print("That QR expired. A new one is opening.", flush=True)
+            await qr_login.recreate()
+        except SessionPasswordNeededError:
+            password = input("This account has a two-step password. Enter it: ")
+            await client.sign_in(password=password)
+            break
+    qr_path.unlink(missing_ok=True)
+
+
+async def main(force_login: bool, use_qr: bool) -> None:
     api_id = _env_int("TELEGRAM_API_ID")
     api_hash = os.environ.get("TELEGRAM_API_HASH")
     if not api_id or not api_hash:
@@ -48,9 +77,12 @@ async def main(force_login: bool) -> None:
     session_dir = Path(os.environ.get("TELEGRAM_SESSION_DIR", "session"))
     session_name = "group_automation"
 
-    if force_login:
+    if force_login or use_qr:
         _remove_session(session_dir, session_name)
-        print("You will now be asked for phone number and code.\n")
+        if use_qr:
+            print("Old session removed. Starting QR login.\n", flush=True)
+        else:
+            print("You will now be asked for phone number and code.\n")
 
     client = create_telethon_client(
         api_id=api_id,
@@ -59,10 +91,13 @@ async def main(force_login: bool) -> None:
         session_dir=session_dir,
     )
 
-    if not force_login:
-        print("You will be asked for your Telegram phone number and login code.")
-        print("Use the same account as the one from my.telegram.org (API ID/hash).\n")
-    await client.start()
+    if use_qr:
+        await _login_with_qr(client)
+    else:
+        if not force_login:
+            print("You will be asked for your Telegram phone number and login code.")
+            print("Use the same account as the one from my.telegram.org (API ID/hash).\n")
+        await client.start()
     me = await client.get_me()
     print(f"\nLogged in as: {me.first_name} (@{me.username or 'no username'})")
     print("Session saved.\n\nNext step (run this exact command):")
@@ -73,5 +108,6 @@ async def main(force_login: bool) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Log in Telethon (user account) once; session is saved for main.py")
     parser.add_argument("--force", action="store_true", help="Delete existing session and ask for phone + code again")
+    parser.add_argument("--qr", action="store_true", help="Log in by scanning a QR code in the Telegram app (no SMS)")
     args = parser.parse_args()
-    asyncio.run(main(force_login=args.force))
+    asyncio.run(main(force_login=args.force, use_qr=args.qr))

@@ -27,12 +27,14 @@ from dotenv import load_dotenv
 load_dotenv()
 load_dotenv(".env.example")
 
-from telegram import BotCommand, Update
+from telegram import Update
 from telegram.error import InvalidToken
 from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
 
 from src.addcode_handlers import build_addcode_conversation_handler
+from src.deletecode_handlers import build_deletecode_handlers
 from src.bot_handlers import (
+    BOT_COMMANDS,
     callback_start_addcode,
     callback_start_codes,
     cmd_new,
@@ -163,11 +165,7 @@ def main() -> None:
 
         async def post_init(app: Application) -> None:
             logger.info("Bot started")
-            await app.bot.set_my_commands([
-                BotCommand("start", "Start the bot and see commands"),
-                BotCommand("new", "Create group: /new CODE CompanyName (e.g. /new TMTP Acme)"),
-                BotCommand("addcode", "Add a new CODE (anyone; saved on server)"),
-            ])
+            await app.bot.set_my_commands(BOT_COMMANDS)
 
         app = (
             Application.builder()
@@ -178,6 +176,8 @@ def main() -> None:
         app.add_handler(CallbackQueryHandler(callback_start_codes, pattern=r"^start_codes$"))
         app.add_handler(CallbackQueryHandler(callback_start_addcode, pattern=r"^start_addcode$"))
         app.add_handler(build_addcode_conversation_handler())
+        for handler in build_deletecode_handlers():
+            app.add_handler(handler)
         app.add_handler(CommandHandler("start", cmd_start))
         app.add_handler(CommandHandler("new", handle_new))
 
