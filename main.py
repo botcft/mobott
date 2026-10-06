@@ -29,15 +29,42 @@ load_dotenv(".env.example")
 
 
 def _materialize_session_from_env() -> None:
-    """Railway: set TELETHON_SESSION_BASE64 to the local session file (base64)."""
+    """Railway: session via TELETHON_SESSION_BASE64_GZ (preferred) or TELETHON_SESSION_BASE64."""
     import base64
+    import gzip
 
-    b64 = (os.environ.get("TELETHON_SESSION_BASE64") or "").strip()
-    if not b64:
-        return
     session_dir = Path(os.environ.get("TELEGRAM_SESSION_DIR", "session"))
     session_dir.mkdir(parents=True, exist_ok=True)
     dest = session_dir / "group_automation.session"
+
+    def _clean_b64(value: str) -> str:
+        v = value.strip().strip('"').strip("'")
+        return "".join(v.split())
+
+    b64_gz = _clean_b64(os.environ.get("TELETHON_SESSION_BASE64_GZ") or "")
+    if b64_gz:
+        try:
+            raw = gzip.decompress(base64.b64decode(b64_gz))
+        except Exception as exc:  # noqa: BLE001
+            print(f"TELETHON_SESSION_BASE64_GZ invalid: {exc}", flush=True)
+            raise SystemExit(1) from exc
+        dest.write_bytes(raw)
+        print(
+            f"Wrote Telethon session to {dest} from TELETHON_SESSION_BASE64_GZ ({len(raw)} bytes)",
+            flush=True,
+        )
+        return
+
+    b64 = _clean_b64(os.environ.get("TELETHON_SESSION_BASE64") or "")
+    if not b64:
+        if dest.exists():
+            print(f"Using existing session file {dest} ({dest.stat().st_size} bytes)", flush=True)
+        else:
+            print(
+                "No TELETHON_SESSION_BASE64_GZ / TELETHON_SESSION_BASE64 set and no session file on disk.",
+                flush=True,
+            )
+        return
     dest.write_bytes(base64.b64decode(b64))
     print(f"Wrote Telethon session to {dest} from TELETHON_SESSION_BASE64", flush=True)
 

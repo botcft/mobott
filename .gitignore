@@ -5,6 +5,8 @@
 venv/
 *.session
 *.session-journal
+session_b64.txt
+session_b64_gz.txt
 __pycache__/
 *.py[cod]
 *$py.class
