@@ -83,6 +83,8 @@ async def main(force_login: bool, use_qr: bool) -> None:
             print("Old session removed. Starting QR login.\n", flush=True)
         else:
             print("You will now be asked for phone number and code.\n")
+            print("Use full international format, e.g. +213792560720", flush=True)
+            print("The code usually arrives inside the Telegram app (chat from Telegram), not SMS.\n", flush=True)
 
     client = create_telethon_client(
         api_id=api_id,
@@ -108,6 +110,8 @@ async def main(force_login: bool, use_qr: bool) -> None:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Log in Telethon (user account) once; session is saved for main.py")
     parser.add_argument("--force", action="store_true", help="Delete existing session and ask for phone + code again")
+    parser.add_argument("--phone", action="store_true", help="Same as --force: log in with phone number (no QR)")
     parser.add_argument("--qr", action="store_true", help="Log in by scanning a QR code in the Telegram app (no SMS)")
     args = parser.parse_args()
-    asyncio.run(main(force_login=args.force, use_qr=args.qr))
+    force = args.force or args.phone
+    asyncio.run(main(force_login=force, use_qr=args.qr))

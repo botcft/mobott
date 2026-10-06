@@ -39,7 +39,30 @@ def get_members(code: str) -> List[str]:
     cfg = get_code_config(code)
     if not cfg:
         return []
-    return list(cfg.get("members") or [])
+    skip = {username_for_telegram(x) for x in (cfg.get("skip_invite") or [])}
+    out: List[str] = []
+    seen = set()
+    for name in cfg.get("members") or []:
+        key = username_for_telegram(name)
+        if key in skip or key in seen:
+            continue
+        seen.add(key)
+        out.append(name)
+    return out
+
+
+def should_auto_add_creator(code: str) -> bool:
+    cfg = get_code_config(code)
+    if not cfg:
+        return False
+    return bool(cfg.get("auto_add_creator"))
+
+
+def get_skip_invite_labels(code: str) -> List[str]:
+    cfg = get_code_config(code)
+    if not cfg:
+        return []
+    return list(cfg.get("skip_invite") or [])
 
 
 def get_admins(code: str) -> List[str]:
@@ -49,11 +72,14 @@ def get_admins(code: str) -> List[str]:
     return list(cfg.get("admins") or [])
 
 
-def get_welcome_message(code: str) -> str:
+def get_welcome_message(code: str, company: str = "") -> str:
     cfg = get_code_config(code)
     if not cfg:
         return ""
-    return (cfg.get("welcome") or "").strip()
+    text = (cfg.get("welcome") or "").strip()
+    if text and "{company}" in text and company:
+        text = text.format(company=company.strip())
+    return text
 
 
 def username_for_telegram(name: str) -> str:

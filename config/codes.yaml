@@ -1,75 +1,88 @@
-# Code -> group naming, members, admins, welcome message
-# Add new codes here; no code changes needed.
-# realcryptomoses is also enforced in code for every /new (see telethon_service._ensure_default_admin).
-
-TEST:
-  name_format: "{company} X TMT.AI (TEST)"
-  members: [TMTAISupportKhubaib, TMTAIMANAGER, TMTAISupportMoeed, realcryptomoses]
-  admins: [TMTAIMANAGER, realcryptomoses]
-  welcome: |
-    Test group 👋
-    Great connecting at Consensus Miami 2026.
-    This is a sandbox chat for TMT.AI support workflow testing.
+# Telegram usernames without @. skip_invite: not auto-invited (add manually).
+# auto_add_creator: person who runs /new is invited into the group (CCP influencers).
+# mo = realcryptomoses (also enforced again in telethon_service). hamza = muzandv (TMTE member).
 
 TMTP:
   name_format: "{company} X TMT.AI (Partnership)"
-  members: [shaheer, reece, joshua, realcryptomoses]
-  admins: [shaheer, reece, realcryptomoses]
+  members:
+    - realcryptomoses
+    - ReeceMeyer
+    - TMTAIMANAGER
+    - TalentManager01
+    - Toripo
+  admins:
+    - realcryptomoses
+    - TalentManager01
+    - TMTAIMANAGER
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for our Track My Trades AI partnership, where we'll coordinate collaboration, integrations, and next steps together.
+    Great connecting at TOKEN2049 Singapore.
+    This chat is for our Track My Trades AI partnership — we'll coordinate collaboration and next steps.
 
 TMTE:
   name_format: "{company} X TMT.AI (Api Connection)"
-  members: [shaheer, reece, joshua, toripo, hamza, realcryptomoses]
-  admins: [shaheer, realcryptomoses]
+  members:
+    - TMTAIMANAGER
+    - ReeceMeyer
+    - TalentManager01
+    - Toripo
+    - muzandv
+  admins:
+    - realcryptomoses
+    - TalentManager01
+    - TMTAIMANAGER
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for our Track My Trades AI exchange API connection, bringing our teams and developers together to ensure a smooth and efficient onboarding to Track My Trades.
+    Great connecting at TOKEN2049 Singapore.
+    This chat is for our Track My Trades AI exchange API connection and developer onboarding.
 
-FDF:
-  name_format: "{company} X Fluence (DF)"
-  members: [josh, realcryptomoses]
-  admins: [josh, realcryptomoses]
+CCP:
+  name_format: "Content Crusaders X {company} (Partnership - TOKEN2049)"
+  auto_add_creator: true
+  skip_invite:
+    - levi
+  members:
+    - dylantalentmanager
+    - TalentManager01
+    - realcryptomoses
+    - rosiedeliverablesmanager
+  admins:
+    - realcryptomoses
+    - TalentManager01
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for Fluence Deal Flow, where we support partners with KOL marketing and deal flow opportunities.
+    Content Crusaders × partnership (TOKEN2049) chat. Glad we met you in token2049 Singapore in 10/2026. Have a good token, will follow up with u at the end of the event.
 
-FE:
-  name_format: "{company} X Fluence (Exchange)"
-  members: [josh, tom buttler, conor kenny, realcryptomoses]
-  admins: [josh, realcryptomoses]
+OP:
+  name_format: "{company} X Operator AI (Discovery - T2049 10/26)"
+  members:
+    - TalentManager01
+    - realcryptomoses
+    - TMTAIMANAGER
+    - Toripo
+  admins:
+    - realcryptomoses
+    - TalentManager01
+    - TMTAIMANAGER
+    - Toripo
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for our Fluence exchange partnership, where we explore collaboration and help support exchange marketing initiatives.
+    Operator AI discovery chat (TOKEN2049).
+    We'll align on next steps from here.
 
-NBSC:
-  name_format: "{company} X NOBS Crypto (Collab)"
-  members: [kyrin, Zaraiz3, ysamar, realcryptomoses]
-  admins: [ysamar, realcryptomoses]
+PR:
+  name_format: "{company} X Prior Exchange (Discovery - T2049 10/26)"
+  members:
+    - TalentManager01
+    - realcryptomoses
+    - TMTAIMANAGER
+    - cryptocrushshow
+  admins:
+    - realcryptomoses
+    - TalentManager01
+    - TMTAIMANAGER
+    - cryptocrushshow
   welcome: |
     Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for a collaboration between your team and ours, focused on aligning and working together efficiently.
-
-NBSDF:
-  name_format: "{company} X NOBS Crypto (DF)"
-  members: [kyrin, Zaraiz3, ysamar, saul, realcryptomoses]
-  admins: [ysamar, realcryptomoses]
-  welcome: |
-    Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for a partnership to get your project featured on our channels, reaching an audience of 150k+ followers.
-
-CRUSHC:
-  name_format: "{company} X Crush Circle (Collab)"
-  members: [kyrin, Zaraiz3, ysamar, realcryptomoses]
-  admins: [ysamar, realcryptomoses]
-  welcome: |
-    Welcome 👋
-    It was great meeting you at Consensus Miami 2026.
-    This chat is for a collaboration between your team and Crush Circle, focused on exploring opportunities and working closely together.
+    Prior Exchange discovery chat (TOKEN2049).
+    We'll coordinate partnership next steps here.

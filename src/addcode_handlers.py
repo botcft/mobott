@@ -4,6 +4,8 @@ Built-in codes from codes.yaml cannot be replaced here.
 """
 import logging
 
+from html import escape
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import (
     CallbackQueryHandler,
@@ -21,6 +23,7 @@ from .code_store import (
     parse_username_list,
     save_dynamic_entry,
 )
+from .log_channel import post_code_change_log
 
 logger = logging.getLogger(__name__)
 
@@ -281,6 +284,13 @@ async def addcode_confirm_save(update: Update, context: ContextTypes.DEFAULT_TYP
         reply_markup=None,
     )
     logger.info("Dynamic code saved: %s", code)
+    actor = update.effective_user
+    who = f"@{actor.username}" if actor and actor.username else (str(actor.id) if actor else "unknown")
+    await post_code_change_log(
+        context.bot,
+        "Code added",
+        f"Code: <b>{escape(code)}</b>\nBy: {escape(who)}",
+    )
     return ConversationHandler.END
 
 

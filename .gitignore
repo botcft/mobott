@@ -14,6 +14,7 @@ __pycache__/
 dist/
 build/
 automation.db
+data/
 config/dynamic_codes.yaml
 bot.log
 .DS_Store

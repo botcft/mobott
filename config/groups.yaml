@@ -7,65 +7,38 @@ invite:
 codes:
   TMTP:
     title_template: "{company} X TMT.AI (Partnership)"
-    members: ["shaheer", "reece", "joshua"]
-    admins: ["shaheer", "reece", "realcryptomoses"]
+    members: ["realcryptomoses", "ReeceMeyer", "TMTAIMANAGER", "TalentManager01", "Toripo"]
+    admins: ["realcryptomoses", "TalentManager01", "TMTAIMANAGER"]
     welcome_message: |
       Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for our Track My Trades AI partnership, where we'll coordinate collaboration, integrations, and next steps together.
+      Great connecting at TOKEN2049 Singapore.
+      This chat is for our Track My Trades AI partnership.
   TMTE:
     title_template: "{company} X TMT.AI (Api Connection)"
-    members: ["shaheer", "reece", "joshua", "toripo", "hamza"]
-    admins: ["shaheer", "realcryptomoses"]
+    members: ["TMTAIMANAGER", "ReeceMeyer", "TalentManager01", "Toripo", "muzandv"]
+    admins: ["realcryptomoses", "TalentManager01", "TMTAIMANAGER"]
     welcome_message: |
       Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for our Track My Trades AI exchange API connection, bringing our teams and developers together to ensure a smooth and efficient onboarding to Track My Trades.
-  FDF:
-    title_template: "{company} X Fluence (DF)"
-    members: ["josh"]
-    admins: ["josh", "realcryptomoses"]
+      Great connecting at TOKEN2049 Singapore.
+      This chat is for our Track My Trades AI exchange API connection.
+  CCP:
+    title_template: "Content Crusaders X {company} (Partnership - TOKEN2049)"
+    members: ["dylantalentmanager", "TalentManager01", "realcryptomoses", "rosiedeliverablesmanager"]
+    admins: ["realcryptomoses", "TalentManager01"]
     welcome_message: |
       Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for Fluence Deal Flow, where we support partners with KOL marketing and deal flow opportunities.
-  FE:
-    title_template: "{company} X Fluence (Exchange)"
-    members: ["josh", "tom buttler", "conor kenny"]
-    admins: ["josh", "realcryptomoses"]
+      Content Crusaders × partnership (TOKEN2049) chat. Glad we met you in token2049 Singapore in 10/2026. Have a good token, will follow up with u at the end of the event.
+  OP:
+    title_template: "{company} X Operator AI (Discovery - T2049 10/26)"
+    members: ["TalentManager01", "realcryptomoses", "TMTAIMANAGER", "Toripo"]
+    admins: ["realcryptomoses", "TalentManager01", "TMTAIMANAGER", "Toripo"]
     welcome_message: |
       Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for our Fluence exchange partnership, where we explore collaboration and help support exchange marketing initiatives.
-  NBSC:
-    title_template: "{company} X NOBS Crypto (Collab)"
-    members: ["kyrin", "Zaraiz3", "ysamar"]
-    admins: ["ysamar", "realcryptomoses"]
+      Operator AI discovery (TOKEN2049).
+  PR:
+    title_template: "{company} X Prior Exchange (Discovery - T2049 10/26)"
+    members: ["TalentManager01", "realcryptomoses", "TMTAIMANAGER", "cryptocrushshow"]
+    admins: ["realcryptomoses", "TalentManager01", "TMTAIMANAGER", "cryptocrushshow"]
     welcome_message: |
       Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for a collaboration between your team and ours, focused on aligning and working together efficiently.
-  NBSDF:
-    title_template: "{company} X NOBS Crypto (DF)"
-    members: ["kyrin", "Zaraiz3", "ysamar", "saul"]
-    admins: ["ysamar", "realcryptomoses"]
-    welcome_message: |
-      Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for a partnership to get your project featured on our channels, reaching an audience of 150k+ followers.
-  CRUSHC:
-    title_template: "{company} X Crush Circle (Collab)"
-    members: ["danielle", "Zaraiz3", "ysamar", "caleb"]
-    admins: ["ysamar", "danielle", "Zaraiz3", "realcryptomoses"]
-    welcome_message: |
-      Welcome 👋
-      It was great meeting you at consensus Miami 2026.
-      This chat is for a collaboration between your team and Crush Circle, focused on exploring opportunities and working closely together.
-  TEST3:
-    title_template: "{company} X TMT.AI (Test)"
-    members: ["tmtaimanager", "tmtaisupportkhubaib", "tmtaisupportmoeed"]
-    admins: ["tmtaimanager", "realcryptomoses"]
-    welcome_message: |
-      Welcome 👋
-      This is a TEST3 onboarding group for validation.
-      Once testing is complete we will switch this flow to the live code mapping.
+      Prior Exchange discovery (TOKEN2049).

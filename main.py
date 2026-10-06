@@ -27,9 +27,26 @@ from dotenv import load_dotenv
 load_dotenv()
 load_dotenv(".env.example")
 
+
+def _materialize_session_from_env() -> None:
+    """Railway: set TELETHON_SESSION_BASE64 to the local session file (base64)."""
+    import base64
+
+    b64 = (os.environ.get("TELETHON_SESSION_BASE64") or "").strip()
+    if not b64:
+        return
+    session_dir = Path(os.environ.get("TELEGRAM_SESSION_DIR", "session"))
+    session_dir.mkdir(parents=True, exist_ok=True)
+    dest = session_dir / "group_automation.session"
+    dest.write_bytes(base64.b64decode(b64))
+    print(f"Wrote Telethon session to {dest} from TELETHON_SESSION_BASE64", flush=True)
+
+
+_materialize_session_from_env()
+
 from telegram import Update
 from telegram.error import InvalidToken
-from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes
+from telegram.ext import Application, CallbackQueryHandler, CommandHandler, ContextTypes, MessageHandler, filters
 
 from src.addcode_handlers import build_addcode_conversation_handler
 from src.deletecode_handlers import build_deletecode_handlers
@@ -38,7 +55,9 @@ from src.bot_handlers import (
     callback_start_addcode,
     callback_start_codes,
     cmd_new,
+    cmd_plain_new,
     cmd_start,
+    register_bot_commands,
 )
 from src.telethon_service import create_telethon_client
 
@@ -163,14 +182,12 @@ def main() -> None:
         async def handle_new(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             await cmd_new(update, context, telethon_client, control_group_id)
 
-        async def post_init(app: Application) -> None:
-            logger.info("Bot started")
-            await app.bot.set_my_commands(BOT_COMMANDS)
+        async def handle_plain_new(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+            await cmd_plain_new(update, context, telethon_client, control_group_id)
 
         app = (
             Application.builder()
             .token(bot_token)
-            .post_init(post_init)
             .build()
         )
         app.add_handler(CallbackQueryHandler(callback_start_codes, pattern=r"^start_codes$"))
@@ -180,6 +197,10 @@ def main() -> None:
             app.add_handler(handler)
         app.add_handler(CommandHandler("start", cmd_start))
         app.add_handler(CommandHandler("new", handle_new))
+        app.add_handler(
+            MessageHandler(filters.TEXT & ~filters.COMMAND, handle_plain_new),
+            group=1,
+        )
 
         try:
             await app.initialize()
@@ -192,6 +213,8 @@ def main() -> None:
                 flush=True,
             )
             raise RuntimeError("Invalid TELEGRAM_BOT_TOKEN")
+        await register_bot_commands(app.bot)
+        logger.info("Registered %s bot commands for Telegram menu", len(BOT_COMMANDS))
         await app.start()
         bot_info = await app.bot.get_me()
         logger.info("Polling started. Bot: @%s", bot_info.username)

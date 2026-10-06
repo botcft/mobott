@@ -4,9 +4,12 @@ Built-in codes from codes.yaml cannot be deleted here.
 """
 import logging
 
+from html import escape
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import CallbackQueryHandler, CommandHandler, ContextTypes
 
+from .log_channel import post_code_change_log
 from .code_store import (
     code_reserved,
     delete_dynamic_code,
@@ -101,6 +104,13 @@ async def deletecode_confirm(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     if delete_dynamic_code(code):
         logger.info("Dynamic code deleted: %s", code)
+        actor = update.effective_user
+        who = f"@{actor.username}" if actor and actor.username else (str(actor.id) if actor else "unknown")
+        await post_code_change_log(
+            context.bot,
+            "Code deleted",
+            f"Code: <b>{escape(code)}</b>\nBy: {escape(who)}",
+        )
         await query.edit_message_text(
             f"Deleted code <b>{code}</b>.",
             parse_mode="HTML",

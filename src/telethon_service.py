@@ -21,7 +21,9 @@ from telethon.tl.types import ChatAdminRights, InputUserEmpty
 from .config_loader import (
     get_admins,
     get_members,
+    get_skip_invite_labels,
     get_welcome_message,
+    should_auto_add_creator,
     username_for_telegram,
 )
 
@@ -51,6 +53,8 @@ class CreateGroupResult:
     members_failed: List[str] = field(default_factory=list)
     admins_promoted: List[str] = field(default_factory=list)
     admins_failed: List[str] = field(default_factory=list)
+    creator_added: bool = False
+    manual_invite_notes: List[str] = field(default_factory=list)
     error: str = ""
 
 
@@ -70,11 +74,34 @@ def _admin_rights() -> ChatAdminRights:
     )
 
 
+async def _invite_user(
+    client: TelegramClient,
+    channel,
+    label: str,
+    entity_resolver,
+    result: CreateGroupResult,
+    bucket: str,
+) -> None:
+    try:
+        entity = await entity_resolver()
+        if entity and not isinstance(entity, InputUserEmpty):
+            await client(InviteToChannelRequest(channel=channel, users=[entity]))
+            if bucket == "member":
+                result.members_added.append(label)
+            return
+    except Exception as e:
+        logger.warning("Failed to add %s: %s", label, e)
+    if bucket == "member":
+        result.members_failed.append(label)
+
+
 async def create_group_and_setup(
     client: TelegramClient,
     code: str,
     company: str,
     group_title: str,
+    creator_user_id: Optional[int] = None,
+    creator_username: Optional[str] = None,
 ) -> CreateGroupResult:
     """
     Create a supergroup, add members, promote admins, send welcome, export invite link.
@@ -83,7 +110,7 @@ async def create_group_and_setup(
     members = get_members(code)
     admins = get_admins(code)
     members, admins = _ensure_default_admin(members, admins)
-    welcome = get_welcome_message(code)
+    welcome = get_welcome_message(code, company)
 
     try:
         # Create supergroup (megagroup = group with history and invite link)
@@ -98,19 +125,37 @@ async def create_group_and_setup(
         channel = create.chats[0]
         result.group_name = group_title
 
+        for skip_name in get_skip_invite_labels(code):
+            result.manual_invite_notes.append(
+                f"{skip_name} — add manually (not auto-invited)"
+            )
+
         # Resolve and add members
         for name in members:
             username = username_for_telegram(name)
-            try:
-                entity = await client.get_input_entity(username)
-                if entity and not isinstance(entity, InputUserEmpty):
-                    await client(InviteToChannelRequest(channel=channel, users=[entity]))
-                    result.members_added.append(name)
-                else:
-                    result.members_failed.append(name)
-            except Exception as e:
-                logger.warning("Failed to add %s: %s", name, e)
-                result.members_failed.append(name)
+
+            async def _resolve(u=username):
+                return await client.get_input_entity(u)
+
+            await _invite_user(client, channel, name, _resolve, result, "member")
+
+        if should_auto_add_creator(code) and creator_user_id:
+            label = creator_username or f"id:{creator_user_id}"
+
+            async def _resolve_creator(uid=creator_user_id):
+                return await client.get_input_entity(uid)
+
+            await _invite_user(
+                client,
+                channel,
+                f"creator:{label}",
+                _resolve_creator,
+                result,
+                "member",
+            )
+            result.creator_added = any(
+                x.startswith("creator:") for x in result.members_added
+            )
 
         # Invites are not always instant joins (privacy / pending). Promoting requires the user
         # to already be in the megagroup, so retry on USER_NOT_PARTICIPANT.
